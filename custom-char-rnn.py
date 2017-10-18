@@ -311,13 +311,7 @@ bg = BatchGenerator(text_corpus=train_text,
                     batch_size=20,
                     num_unroll_steps=10)
 
-
 vocab = bg.vocab
-
-# hidden_units, batch_size,
-#                  num_unroll_steps, embedding_size,
-#                  model, reuse, num_layers,vocab_size,
-#                  max_grad_norm, learning_rate
 
 params = {'hidden_units': 128,
           'batch_size': 20,
@@ -348,37 +342,27 @@ with tf.name_scope('sample'):
               'learning_rate': 2e-3,
               }
 
-    charnn_test = CustomCharRNN(**params)
+    charnn_sample = CustomCharRNN(**params)
 
 
 
 start_text = "First Citizen: " \
              "Before we proceed any further, hear me speak."
 
+
+num_epochs = 10
+
 with tf.Session() as sess:
 
     tf.global_variables_initializer().run()
 
-    # state = sess.run(self.zero_state)
-    #
-    # ops = [charrnn.final_state]
-    #
-    # results = sess.run(ops, )
-
-    for e in range(0, 1):
+    for e in range(0, num_epochs):
         print(e)
         charrnn_train.train_epoch(train_size, bg, sess, divide_by_n=1)
 
-    result = charnn_test.sample_seq(sess, 1000, start_text=start_text, vocab=vocab, max_prob=False)
+    result = charnn_sample.sample_seq(sess, 1000, start_text=start_text, vocab=vocab, max_prob=False)
 
     print(result)
-
-# for e in range(0,10):
-#     print(e)
-#     batch = bg.prepare_batch()
-#     # print(batch[:,:-1])
-#     # print(batch[:, 1:])
-
 
 
 
