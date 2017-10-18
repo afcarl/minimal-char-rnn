@@ -313,7 +313,7 @@ def create_tuple_placeholders_with_default(inputs, extra_dims, shape):
 
 
 import codecs
-with codecs.open('./tensorflow-char-rnn/data/tiny_shakespeare.txt', 'r', encoding='utf-8') as f:
+with codecs.open('./data/tiny_shakespeare.txt', 'r', encoding='utf-8') as f:
     text = f.read()
 
 print(text)
