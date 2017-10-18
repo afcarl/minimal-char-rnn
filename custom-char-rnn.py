@@ -327,6 +327,7 @@ params = {'hidden_units': 128,
 
 with tf.name_scope('training'):
     charrnn_train = CustomCharRNN(**params)
+
 tf.get_variable_scope().reuse_variables()
 
 with tf.name_scope('sample'):
@@ -349,8 +350,8 @@ with tf.name_scope('sample'):
 start_text = "First Citizen: " \
              "Before we proceed any further, hear me speak."
 
-
 num_epochs = 10
+
 
 with tf.Session() as sess:
 
