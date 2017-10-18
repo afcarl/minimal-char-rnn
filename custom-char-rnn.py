@@ -335,7 +335,7 @@ with tf.name_scope('training'):
     charrnn_train = CustomCharRNN(**params)
 tf.get_variable_scope().reuse_variables()
 
-with tf.name_scope('test'):
+with tf.name_scope('sample'):
     params = {'hidden_units': 128,
               'batch_size': 1,
               'num_unroll_steps': 1,
