@@ -136,9 +136,6 @@ class CustomCharRNN(object):
                        reuse=tf.get_variable_scope().reuse, **params)
 
         cells = [cell]
-        # params['input_size'] = self.hidden_size
-        # more explicit way to create cells for MultiRNNCell than
-        # [higher_layer_cell] * (self.num_layers - 1)
 
         for i in range(self.num_layers - 1):
             higher_layer_cell = cell_fn(self.hidden_units, reuse=tf.get_variable_scope().reuse, **params)
@@ -149,11 +146,6 @@ class CustomCharRNN(object):
         with tf.name_scope('initial_state'):
             # zero_state is used to compute the intial state for cell.
             self.zero_state = multi_cell.zero_state(self.batch_size, tf.float32)
-            # Placeholder to feed in initial state.
-            # self.initial_state = tf.placeholder(
-            #   tf.float32,
-            #   [self.batch_size, multi_cell.state_size],
-            #   'initial_state')
 
             self.initial_state = create_tuple_placeholders_with_default(
                 multi_cell.zero_state(batch_size, tf.float32),
@@ -171,19 +163,8 @@ class CustomCharRNN(object):
         with tf.name_scope('embedding_layer'):
             inputs = tf.nn.embedding_lookup(self.embedding, self.input_data)
 
-        # with tf.name_scope('slice_inputs'):
-        #     Slice inputs into a list of shape [batch_size, 1] data colums.
-            # sliced_inputs = [tf.squeeze(input_, [1])
-            #                  for input_ in tf.split(axis=1, num_or_size_splits=self.num_unrollings, value=inputs)]
-
-        # sliced_inputs = tf.Print(sliced_inputs, [tf.shape(sliced_inputs)], "this is the size")
-        #
-        # sliced_inputs = tf.unstack(sliced_inputs, self.num_unrollings)
-
         sliced_inputs = tf.unstack(inputs, self.num_unrollings, 1)
 
-        # sliced_inputs = tf.Print(sliced_inputs, [tf.shape(sliced_inputs)], "This is the size of sliced_inputs")
-        # sliced_inputs = tf.unstack(sliced_inputs, self.num_unrollings)
 
         # Copy cell to do unrolling and collect outputs.
         outputs, final_state = tf.contrib.rnn.static_rnn(
